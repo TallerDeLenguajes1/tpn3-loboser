@@ -25,6 +25,9 @@ struct Cliente
 
 void cargaClientes(Cliente * pntClientes, int cantClientes);
 int cargaProductos(int prodID,Producto * pntProducto, int productosAPedir);
+void mostrarClientes(Cliente * pntClientes, int cantClientes);
+float mostrarProductos(Producto * pntProducto, int productosAPedir);
+float costoTotal(Producto * pntProducto);
 
 int main(){
     srand(time(NULL));
@@ -34,6 +37,7 @@ int main(){
     system("cls");
     Cliente * pntCliente = (Cliente *) malloc(sizeof(Cliente)*cantClientes);
     cargaClientes(pntCliente,cantClientes);
+    mostrarClientes(pntCliente,cantClientes);
     free(pntCliente);
 
     getchar();
@@ -70,4 +74,35 @@ int cargaProductos(int prodID,Producto * pntProducto, int productosAPedir){
         (pntProducto + i)->TipoProducto = TiposProductos[i];
     }
     return prodID;
+}
+
+void mostrarClientes(Cliente * pntClientes, int cantClientes){
+    float total;
+    for (int i = 0; i < cantClientes; i++)
+    {
+        printf("/////////////////////////////////////////////////////////\n\n");
+        printf("Nombre del Cliente: %s\n", (pntClientes + i)->NombreCliente);
+        printf("ID: %d\n", (pntClientes + i)->ClienteID);
+        printf("Cantidad de Productos a Pedir: %d\n\n", (pntClientes + i)->CantidadProductosAPedir);
+        total = mostrarProductos((pntClientes + i)->Productos,(pntClientes + i)->CantidadProductosAPedir);
+        printf("Costo Total del Cliente: %.2f\n", total);
+    }
+}
+
+float mostrarProductos(Producto * pntProducto, int productosAPedir){
+    float total = 0;
+    printf("Productos: \n\n");
+    for (int i = 0; i < productosAPedir; i++)
+    {
+        printf("Tipo: %s\n", (pntProducto + i)->TipoProducto);
+        printf("ID: %d\n", (pntProducto + i)->ProductoID);
+        printf("Cantidad: %d\n", (pntProducto + i)->Cantidad);
+        printf("Precio: %.2f\n\n", (pntProducto + i)->PrecioUnitario);
+        total = total + costoTotal(pntProducto + i);
+    }
+    return total;
+}
+
+float costoTotal(Producto * pntProducto){
+    return((pntProducto->Cantidad)*(pntProducto->PrecioUnitario));
 }
